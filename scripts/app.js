@@ -180,10 +180,21 @@ function postAudio(blob) {
   let formData = new FormData();
   formData.append("audio", blob);
 
-  const res = axios.post(
-    `${URL}/predict/`,
-    formData
-  );
+  //const res = axios.post(
+  //  `${URL}/predict/`,
+  //  formData
+  //);
+
+  const res = axios({
+    method: 'post',
+    url: '/predict/',
+    data: formData,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'multipart/form-data'
+    },
+  })
+
   if (res.status == 200) {
     console.log("Done!");
     const data = res.data;
