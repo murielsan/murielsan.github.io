@@ -53,51 +53,11 @@ if (navigator.mediaDevices.getUserMedia) {
     mediaRecorder.onstop = function (e) {
       console.log("data available after MediaRecorder.stop() called.");
 
-      //const clipName = prompt('Enter a name for your sound clip?','My unnamed clip');
-
-      const clipContainer = document.createElement('article');
-      const clipLabel = document.createElement('p');
-      const audio = document.createElement('audio');
-      const deleteButton = document.createElement('button');
-
-      clipContainer.classList.add('clip');
-      audio.setAttribute('controls', '');
-      deleteButton.textContent = 'Delete';
-      deleteButton.className = 'delete';
-
-      //if (clipName === null) {
-      clipLabel.textContent = 'My unnamed clip';
-      //} else {
-      //  clipLabel.textContent = clipName;
-      //}
-
-      clipContainer.appendChild(audio);
-      clipContainer.appendChild(clipLabel);
-      clipContainer.appendChild(deleteButton);
-      soundClips.appendChild(clipContainer);
-
-      audio.controls = true;
-      const blob = new Blob(chunks, { 'type': 'audio/wav' });
+      const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
       chunks = [];
-      //const audioURL = window.URL.createObjectURL(blob);
-      //audio.src = audioURL;
+
       postAudio(blob)
       console.log("recorder stopped");
-
-      deleteButton.onclick = function (e) {
-        let evtTgt = e.target;
-        evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
-      }
-
-      clipLabel.onclick = function () {
-        const existingName = clipLabel.textContent;
-        const newClipName = prompt('Enter a new name for your sound clip?');
-        if (newClipName === null) {
-          clipLabel.textContent = existingName;
-        } else {
-          clipLabel.textContent = newClipName;
-        }
-      }
     }
 
     mediaRecorder.ondataavailable = function (e) {
@@ -172,18 +132,12 @@ function visualize(stream) {
   }
 }
 
-const URL = "https://custom-corecode-api.herokuapp.com";
-
 function postAudio(blob) {
+  const URL = "https://custom-corecode-api.herokuapp.com";
 
   console.log("Uploading...");
   let formData = new FormData();
   formData.append("audio", blob);
-
-  //const res = axios.post(
-  //  `${URL}/predict/`,
-  //  formData
-  //);
 
   const res = axios({
     method: 'post',
@@ -195,15 +149,19 @@ function postAudio(blob) {
     },
   })
 
-  if (res.status == 200) {
-    console.log("Done!");
-    const data = res.data;
-    console.log(data);
-    return data;
-  } else {
-    console.log("Failed");
-    throw new Error("Failed to upload to server");
-  }
+  res.then(
+    function ok(response) {
+      if (response.status == 200) {
+        console.log("Done!");
+        console.log(response.data);
+        document.getElementById("prediction").innerHTML = response.data;
+      } else {
+        console.log("Failed");
+        throw new Error("Failed to upload to server");
+      }
+    }
+  );
+
 }
 
 window.onresize = function () {
