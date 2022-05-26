@@ -1,3 +1,8 @@
+Simple test web for CUSTOM api based on web dictaphone example by MDN
+Also, thanks to @boyander for his [inside shazam](https://github.com/boyander/inside-shazam) project
+
+---------------------------------------------------------------------
+
 A sample MDN app that uses getUserMedia and MediaRecorder API for recording audio snippets, and The Web Audio API for visualizations.
 
 You can [play with the live demo](https://mdn.github.io/web-dictaphone/).

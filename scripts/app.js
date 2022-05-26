@@ -172,7 +172,7 @@ function visualize(stream) {
   }
 }
 
-const URL = "http://127.0.0.1:8000";
+const URL = "https://custom-corecode-api.herokuapp.com";
 
 function postAudio(blob) {
 
