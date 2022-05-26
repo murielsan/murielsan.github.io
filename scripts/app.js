@@ -187,10 +187,10 @@ function postAudio(blob) {
 
   const res = axios({
     method: 'post',
-    url: '${URL}/predict/',
+    url: `${URL}/predict/`,
     data: formData,
     headers: {
-      'Accept': 'application/json',
+      'Accept': '*/*',
       'Content-Type': 'multipart/form-data'
     },
   })
